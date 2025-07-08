@@ -13,6 +13,12 @@ class User extends Authenticatable implements JWTSubject
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $table= 'users';
+    protected $primaryKey = 'id';
+    protected $keyType = "int";
+    public $timestamps = true;
+    public $incrementing = true;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,16 +28,9 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+        'prefered_activity',
+        'preferred_travel_style',
+        'home_location',
     ];
 
     /**
@@ -65,5 +64,25 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Get the name of the "auth" identifier.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName(): string
+    {
+        return 'email';
+    }
+
+    /**
+     * Get the value of the "auth" identifier.
+     *
+     * @return mixed
+     */
+    public function getAuthPassword(): string
+    {
+        return $this->password;
     }
 }
