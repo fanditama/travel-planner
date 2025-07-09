@@ -22,8 +22,13 @@ class ApiAuthMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            // Parse token dari header Authorization dengan JWT
-            $user = JWTAuth::parseToken()->authenticate();
+            // Parse token dan ambil payload
+            $payload = JWTAuth::parseToken()->getPayload();
+            $userId = $payload->get('sub');
+            
+            // Cari user berdasarkan ID dari token
+            $user = \App\Models\User::find($userId);
+            
             if (!$user) {
                 return response()->json([
                     'errors' => [
@@ -34,10 +39,10 @@ class ApiAuthMiddleware
                 ], 404);
             }
 
-            // Jika autentikasi berhasil
+            // Set user untuk request ini
             Auth::guard('api')->login($user);
+            
         } catch (TokenExpiredException $e) {
-            //Token sudah kadaluarsa
             return response()->json([
                 'errors' => [
                     'message' => [
@@ -46,8 +51,7 @@ class ApiAuthMiddleware
                 ]
             ], 401);
         } catch (TokenInvalidException $e) {
-            // Token tidak valid
-             return response()->json([
+            return response()->json([
                 'errors' => [
                     'message' => [
                         'Token Invalid'
@@ -55,17 +59,15 @@ class ApiAuthMiddleware
                 ]
             ], 401);
         } catch (JWTException $e) {
-            // Token tidak ada atau ada error lain saat parsing/validasi token
-             return response()->json([
+            return response()->json([
                 'errors' => [
                     'message' => [
-                        'Token Absent or Invalid Format'
+                        'unauthorized'
                     ]
                 ]
             ], 401);
         }
 
-        // Jika autentikasi JWT berhasil
         return $next($request);
     }
 }
