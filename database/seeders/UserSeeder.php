@@ -17,13 +17,19 @@ class UserSeeder extends Seeder
         User::create([
             'email' => 'test@example.com',
             'password' => Hash::make('test'),
-            'name' => 'test'
+            'name' => 'test',
+            'preferred_activity' => 'hiking',
+            'preferred_travel_style' => 'backpacking',
+            'home_location' => 'Jakarta',
         ]);
 
         User::create([
             'email' => 'test@example2.com',
             'password' => Hash::make('test2'),
-            'name' => 'test2'
+            'name' => 'test2',
+            'preferred_activity' => 'swimming',
+            'preferred_travel_style' => 'luxury',
+            'home_location' => 'New York',
         ]);
     }
 }

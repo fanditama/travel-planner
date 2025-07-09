@@ -18,6 +18,9 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'email' => $this->email,
             'name' => $this->name,
+            'preferred_activity' => $this->preferred_activity,
+            'preferred_travel_style' => $this->preferred_travel_style,
+            'home_location' => $this->home_location,
         ];
     }
 }

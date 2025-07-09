@@ -1,11 +1,8 @@
 <?php
 
 namespace Tests\Feature;
-
-use App\Models\User;
-use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\UserSeeder;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -82,13 +79,19 @@ class UserTest extends TestCase
             ->assertJson([
                 'data' => [
                     'email' => 'test@example.com',
-                    'name' => 'test'
+                    'name' => 'test',
+                    'preferred_activity' => 'hiking',
+                    'preferred_travel_style' => 'backpacking',
+                    'home_location' => 'Jakarta'
                 ]
             ])
             ->assertJsonStructure([
                 'data' => [
                     'email',
-                    'name'
+                    'name',
+                    'preferred_activity',
+                    'preferred_travel_style',
+                    'home_location'
                 ],
                 'token'
             ]);
@@ -123,6 +126,67 @@ class UserTest extends TestCase
                 'errors' => [
                     'message' => [
                         'email or password wrong'
+                    ]
+                ]
+            ]);
+    }
+
+    /**
+     * Get User Test
+     */
+    public function testGetSuccess()
+    {
+        $this->seed([UserSeeder::class]);
+
+        // Login terlebih dahulu untuk mendapatkan token
+        $loginResponse = $this->post('/api/users/login', [
+            'email' => 'test@example.com',
+            'password' => 'test'
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        // Gunakan token untuk mengakses endpoint yang dilindungi
+        $this->get('/api/users/current', [
+            'Authorization' => 'Bearer ' . $token
+        ])->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'email' => 'test@example.com',
+                    'name' => 'test',
+                    'preferred_activity' => 'hiking',
+                    'preferred_travel_style' => 'backpacking',
+                    'home_location' => 'Jakarta'
+                ]
+            ]);
+    }
+
+    public function testGetUnauthorized()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->get('/api/users/current', [])->assertStatus(401)
+            ->assertJson([
+                'errors' => [
+                    'message' => [
+                        'unauthorized'
+                    ]
+                ]
+            ]);
+    }
+
+    public function testGetInvalidToken()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->get('/api/users/current', [
+            'Authorization' => 'Bearer'
+        ])->assertStatus(401)
+            ->assertJson([
+                'errors' => [
+                    'message' => [
+                        'unauthorized'
                     ]
                 ]
             ]);
