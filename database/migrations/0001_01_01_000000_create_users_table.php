@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email', 100)->unique("users_email_unique");
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 100);
-            $table->string('prefered_activity', 100)->nullable();
+            $table->string('preferred_activity', 100)->nullable();
             $table->string('preferred_travel_style', 100)->nullable();
             $table->string('home_location', 100)->nullable();
             $table->timestamps();
