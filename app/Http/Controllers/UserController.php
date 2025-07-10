@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -68,4 +69,39 @@ class UserController extends Controller
         $auth = Auth::guard('api')->user(); // cek user yg sudah login
         return new UserResource($auth);
     }
+
+    public function update(UserUpdateRequest $request): UserResource
+    {
+        $data = $request->validated();
+
+        $user = Auth::guard('api')->user(); // cek user yg sudah login
+
+
+        if (isset($data['password'])) {
+            $user->password = Hash::make($data['password']);
+        }
+        
+        if (isset($data['name'])) {
+            $user->name = $data['name'];
+        }
+
+        if (isset($data['preferred_activity'])) {
+            $user->preferred_activity = $data['preferred_activity'];
+        }
+
+        if (isset($data['preferred_travel_style'])) {
+            $user->preferred_travel_style = $data['preferred_travel_style'];
+        }
+
+        if (isset($data['home_location'])) {
+            $user->home_location = $data['home_location'];
+        }
+
+        /** @var \App\Models\User $user **/
+        $user->save();
+
+        return new UserResource($user);
+    }
+
+    
 }

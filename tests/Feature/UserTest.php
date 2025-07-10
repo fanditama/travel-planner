@@ -1,6 +1,8 @@
 <?php
 
 namespace Tests\Feature;
+
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Database\Seeders\UserSeeder;
 use Tests\TestCase;
@@ -190,5 +192,188 @@ class UserTest extends TestCase
                     ]
                 ]
             ]);
+    }
+
+    /**
+     * Update User Test
+     */
+    public function testUpdatePasswordSuccess() 
+    {
+        $this->seed([UserSeeder::class]);
+        $oldUser = User::where('email', 'test@example.com')->first();
+
+        // Login terlebih dahulu untuk mendapatkan token
+        $loginResponse = $this->post('/api/users/login', [
+            'email' => 'test@example.com',
+            'password' => 'test'
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $this->put('/api/users/current', 
+            [
+                'password' => 'baru'
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'email' => 'test@example.com',
+                    'name' => 'test',
+                    'preferred_activity' => 'hiking',
+                    'preferred_travel_style' => 'backpacking',
+                    'home_location' => 'Jakarta',
+                ]
+            ]);
+
+        $newUser = User::where('email', 'test@example.com')->first();
+        self::assertNotEquals($oldUser->password, $newUser->password);
+    }
+
+    public function testUpdateNameSuccess() 
+    {
+        $this->seed([UserSeeder::class]);
+        $oldUser = User::where('email', 'test@example.com')->first();
+
+        // Login terlebih dahulu untuk mendapatkan token
+        $loginResponse = $this->post('/api/users/login', [
+            'email' => 'test@example.com',
+            'password' => 'test'
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $this->put('/api/users/current', 
+            [
+                'name' => 'baru'
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'email' => 'test@example.com',
+                    'name' => 'baru',
+                    'preferred_activity' => 'hiking',
+                    'preferred_travel_style' => 'backpacking',
+                    'home_location' => 'Jakarta',
+                ]
+            ]);
+
+        $newUser = User::where('email', 'test@example.com')->first();
+        self::assertNotEquals($oldUser->name, $newUser->name);
+    }
+
+    public function testUpdatePreferredActivitySuccess() 
+    {
+        $this->seed([UserSeeder::class]);
+        $oldUser = User::where('email', 'test@example.com')->first();
+
+        // Login terlebih dahulu untuk mendapatkan token
+        $loginResponse = $this->post('/api/users/login', [
+            'email' => 'test@example.com',
+            'password' => 'test'
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $this->put('/api/users/current', 
+            [
+                'preferred_activity' => 'baru'
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'email' => 'test@example.com',
+                    'name' => 'test',
+                    'preferred_activity' => 'baru',
+                    'preferred_travel_style' => 'backpacking',
+                    'home_location' => 'Jakarta',
+                ]
+            ]);
+
+        $newUser = User::where('email', 'test@example.com')->first();
+        self::assertNotEquals($oldUser->preferred_activity, $newUser->preferred_activity);
+    }
+
+    public function testUpdatePreferredTravelStyleSuccess() 
+    {
+        $this->seed([UserSeeder::class]);
+        $oldUser = User::where('email', 'test@example.com')->first();
+
+        // Login terlebih dahulu untuk mendapatkan token
+        $loginResponse = $this->post('/api/users/login', [
+            'email' => 'test@example.com',
+            'password' => 'test'
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $this->put('/api/users/current', 
+            [
+                'preferred_travel_style' => 'baru'
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'email' => 'test@example.com',
+                    'name' => 'test',
+                    'preferred_activity' => 'hiking',
+                    'preferred_travel_style' => 'baru',
+                    'home_location' => 'Jakarta',
+                ]
+            ]);
+
+        $newUser = User::where('email', 'test@example.com')->first();
+        self::assertNotEquals($oldUser->preferred_travel_style, $newUser->preferred_travel_style);
+    }
+
+    public function testUpdateHomeLocationSuccess() 
+    {
+        $this->seed([UserSeeder::class]);
+        $oldUser = User::where('email', 'test@example.com')->first();
+
+        // Login terlebih dahulu untuk mendapatkan token
+        $loginResponse = $this->post('/api/users/login', [
+            'email' => 'test@example.com',
+            'password' => 'test'
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $this->put('/api/users/current', 
+            [
+                'home_location' => 'baru'
+            ],
+            [
+                'Authorization' => 'Bearer ' . $token
+            ]
+        )->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'email' => 'test@example.com',
+                    'name' => 'test',
+                    'preferred_activity' => 'hiking',
+                    'preferred_travel_style' => 'backpacking',
+                    'home_location' => 'baru',
+                ]
+            ]);
+
+        $newUser = User::where('email', 'test@example.com')->first();
+        self::assertNotEquals($oldUser->home_location, $newUser->home_location);
     }
 }
