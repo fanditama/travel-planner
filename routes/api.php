@@ -10,4 +10,5 @@ Route::middleware(['api.auth'])->group(function () {
 	// Route User
 	Route::get('/users/current', [UserController::class, 'get']);
 	Route::put('/users/current', [UserController::class, 'update']);
+	Route::delete('/users/logout', [UserController::class, 'logout']);
 });

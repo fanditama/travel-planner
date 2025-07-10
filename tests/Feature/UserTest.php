@@ -376,4 +376,50 @@ class UserTest extends TestCase
         $newUser = User::where('email', 'test@example.com')->first();
         self::assertNotEquals($oldUser->home_location, $newUser->home_location);
     }
+
+    public function testLogoutSuccess()
+    {
+        $this->seed([UserSeeder::class]);
+
+        // Login terlebih dahulu untuk mendapatkan token
+        $loginResponse = $this->post('/api/users/login', [
+            'email' => 'test@example.com',
+            'password' => 'test'
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $this->delete(uri: '/api/users/logout', headers: [
+            'Authorization' => 'Bearer ' . $token
+        ])->assertStatus(200)
+            ->assertJson([
+                'data' => true
+            ]);
+    }
+
+    public function testLogoutFailed()
+    {
+        $this->seed([UserSeeder::class]);
+
+        // Login terlebih dahulu untuk mendapatkan token
+        $loginResponse = $this->post('/api/users/login', [
+            'email' => 'test@example.com',
+            'password' => 'test'
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $this->delete(uri: '/api/users/logout', headers: [
+            'Authorization' => 'salah' . $token
+        ])->assertStatus(401)
+            ->assertJson([
+                'errors' => [
+                    "message" => [
+                        'unauthorized'
+                    ]
+                ]
+            ]);
+    }
 }

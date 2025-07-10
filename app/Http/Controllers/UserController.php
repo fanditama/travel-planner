@@ -103,5 +103,12 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    
+    public function logout(): JsonResponse
+    {
+        Auth::guard('api')->logout();
+
+        return response()->json([
+            "data" => true
+        ])->setStatusCode(200);
+    }
 }
