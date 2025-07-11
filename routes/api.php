@@ -9,6 +9,7 @@ Route::post('/users/login', [UserController::class, 'login']);
 
 // Route Destination
 Route::post('/destinations', [DestinationController::class, 'create']);
+Route::get('/destinations/{id}', [DestinationController::class, 'get'])->where('id', '[0-9]+');
 
 Route::middleware(['api.auth'])->group(function () {
 	// Route User

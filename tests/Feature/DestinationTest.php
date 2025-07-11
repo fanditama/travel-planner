@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Destination;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DestinationTest extends TestCase
@@ -58,6 +59,50 @@ class DestinationTest extends TestCase
                     ],
                     'location' => [
                         'The location field is required.'
+                    ]
+                ]
+            ]);
+    }
+
+    public function testGetSuccess()
+    {
+        $destination = Destination::create([
+            'name' => 'Test Destination',
+            'location' => 'Jakarta',
+            'latitude' => -6.2088,
+            'longitude' => 106.8456,
+            'category' => 'Kuliner',
+            'average_rating' => 4.5,
+            'image_url' => 'https://example.com/image.jpg',
+            'approx_price_range' => 'Terjangkau',
+            'best_time_to_visit' => 'April hingga Oktober',
+        ]);
+
+        $this->get('/api/destinations/' . $destination->id)
+            ->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'name' => 'Test Destination',
+                    'location' => 'Jakarta',
+                    'latitude' => -6.2088,
+                    'longitude' => 106.8456,
+                    'category' => 'Kuliner',
+                    'average_rating' => 4.5,
+                    'image_url' => 'https://example.com/image.jpg',
+                    'approx_price_range' => 'Terjangkau',
+                    'best_time_to_visit' => 'April hingga Oktober',
+                ]
+            ]);
+    }
+
+    public function testGetNotFound()
+    {
+        $this->get('/api/destinations/99999')
+            ->assertStatus(404)
+            ->assertJson([
+                'errors' => [
+                    "message" => [
+                        "not found"
                     ]
                 ]
             ]);
