@@ -39,6 +39,16 @@ jobs:
       run: |
         mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS travel_planner_restful_api_testing;"
 
+    - name: Run Database Migrations
+      env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: travel_planner_restful_api_testing
+        DB_USERNAME: root
+        DB_PASSWORD: root
+      run: php artisan migrate --force
+
     - name: Execute tests (PHPUnit)
       env:
         DB_CONNECTION: mysql
