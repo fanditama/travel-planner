@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/users', [UserController::class, 'register']);
 Route::post('/users/login', [UserController::class, 'login']);
+
+// Route Destination
+Route::post('/destinations', [DestinationController::class, 'create']);
 
 Route::middleware(['api.auth'])->group(function () {
 	// Route User
