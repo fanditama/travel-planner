@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Destination;
 use App\Models\User;
+use Database\Seeders\DestinationSearchSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class DestinationTest extends TestCase
@@ -185,5 +187,35 @@ class DestinationTest extends TestCase
                     ]
                 ]
             ]);
+    }
+
+    public function testSearchByDestinationName()
+    {
+        $this->seed([DestinationSearchSeeder::class]);
+
+        $response = $this->get('/api/destinations?name=destination_name')
+            ->assertStatus(200)
+            ->json();
+
+        Log::info(json_encode($response, JSON_PRETTY_PRINT));
+
+        self::assertEquals(10, count($response['data']));
+        self::assertEquals(20, $response['meta']['total']);
+
+    }
+
+    public function testSearchByDestinationCategory()
+    {
+        $this->seed([DestinationSearchSeeder::class]);
+
+        $response = $this->get('/api/destinations?category=kuliner')
+            ->assertStatus(200)
+            ->json();
+
+        Log::info(json_encode($response, JSON_PRETTY_PRINT));
+
+        self::assertEquals(10, count($response['data']));
+        self::assertEquals(20, $response['meta']['total']);
+
     }
 }
