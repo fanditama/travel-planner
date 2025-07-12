@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Destination;
 use App\Models\User;
 use Database\Seeders\DestinationSearchSeeder;
+use Database\Seeders\DestinationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
@@ -112,6 +113,8 @@ class DestinationTest extends TestCase
 
     public function testUpdateSuccess()
     {
+        $this->seed([DestinationSeeder::class]);
+
         $destination = Destination::query()->limit(1)->first();
 
         $this->put('/api/destinations/' . $destination->id, [
@@ -142,6 +145,8 @@ class DestinationTest extends TestCase
 
     public function testUpdateValidationError()
     {
+        $this->seed([DestinationSeeder::class]);
+
         $destination = Destination::query()->limit(1)->first();
 
         $this->put('/api/destinations/' . $destination->id, [
