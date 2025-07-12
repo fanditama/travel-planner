@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DestinationCreateRequest;
+use App\Http\Requests\DestinationUpdateRequest;
 use App\Http\Resources\DestinationResource;
 use App\Models\Destination;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -34,6 +35,27 @@ class DestinationController extends Controller
                 ]
             ])->setStatusCode(404));
         }
+
+        return new DestinationResource($destination);
+    }
+
+    public function update(int $id, DestinationUpdateRequest $request): DestinationResource
+    {
+        $destination = Destination::where('id', $id)->first();
+
+        if (!$destination) {
+            throw new HttpResponseException(response()->json([
+                'errors' => [
+                    'message' => [
+                        'not found'
+                    ]
+                ]
+            ])->setStatusCode(404));
+        }
+
+        $data = $request->validated();
+        $destination->fill($data);
+        $destination->save();
 
         return new DestinationResource($destination);
     }

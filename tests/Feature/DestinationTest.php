@@ -107,4 +107,58 @@ class DestinationTest extends TestCase
                 ]
             ]);
     }
+
+    public function testUpdateSuccess()
+    {
+        $destination = Destination::query()->limit(1)->first();
+
+        $this->put('/api/destinations/' . $destination->id, [
+            'name' => 'Test Destination 2',
+            'location' => 'Surabaya',
+            'latitude' => -7.2574,
+            'longitude' => 112.7521,
+            'category' => 'Santai',
+            'average_rating' => 4.2,
+            'image_url' => 'https://example.com/image2.jpg',
+            'approx_price_range' => 'Premium',
+            'best_time_to_visit' => 'November hingga Februari',
+        ])->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'name' => 'Test Destination 2',
+                    'location' => 'Surabaya',
+                    'latitude' => -7.2574,
+                    'longitude' => 112.7521,
+                    'category' => 'Santai',
+                    'average_rating' => 4.2,
+                    'image_url' => 'https://example.com/image2.jpg',
+                    'approx_price_range' => 'Premium',
+                    'best_time_to_visit' => 'November hingga Februari',
+                ]
+            ]);
+    }
+
+    public function testUpdateValidationError()
+    {
+        $destination = Destination::query()->limit(1)->first();
+
+        $this->put('/api/destinations/' . $destination->id, [
+            'name' => '',
+            'location' => 'Surabaya',
+            'latitude' => -7.2574,
+            'longitude' => 112.7521,
+            'category' => 'Santai',
+            'average_rating' => 4.2,
+            'image_url' => 'https://example.com/image2.jpg',
+            'approx_price_range' => 'Premium',
+            'best_time_to_visit' => 'November hingga Februari',
+        ])->assertStatus(400)
+            ->assertJson([
+                'errors' => [
+                    'name' => [
+                        'The name field is required.'
+                    ]
+                ]
+            ]);
+    }
 }
