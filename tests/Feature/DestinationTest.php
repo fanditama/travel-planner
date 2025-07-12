@@ -170,6 +170,8 @@ class DestinationTest extends TestCase
     }
 
     public function testDeleteSucces() {
+        $this->seed([DestinationSeeder::class]);
+        
         $destination = Destination::query()->limit(1)->first();
 
         $this->delete('/api/destinations/' . $destination->id, [])
@@ -181,7 +183,7 @@ class DestinationTest extends TestCase
 
     public function testDeleteNotFound()
     {
-        $destination = Destination::query()->limit(1)->first();
+        $this->seed([DestinationSeeder::class]);
 
         $this->delete('/api/destinations/99999')
             ->assertStatus(404)
