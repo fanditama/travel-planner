@@ -59,4 +59,24 @@ class DestinationController extends Controller
 
         return new DestinationResource($destination);
     }
+
+    public function delete(int $id): jsonResponse
+    {
+        $destination = Destination::where('id', $id)->first();
+
+        if (!$destination) {
+            throw new HttpResponseException(response()->json([
+                'errors' => [
+                    'message' => [
+                        'not found'
+                    ]
+                ]
+            ])->setStatusCode(404));
+        }
+
+        $destination->delete();
+        return response()->json([
+            'data' => true
+        ])->setStatusCode(200);
+    }
 }

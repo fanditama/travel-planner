@@ -161,4 +161,29 @@ class DestinationTest extends TestCase
                 ]
             ]);
     }
+
+    public function testDeleteSucces() {
+        $destination = Destination::query()->limit(1)->first();
+
+        $this->delete('/api/destinations/' . $destination->id, [])
+            ->assertStatus(200)
+            ->assertJson([
+                'data' => true
+            ]);
+    }
+
+    public function testDeleteNotFound()
+    {
+        $destination = Destination::query()->limit(1)->first();
+
+        $this->delete('/api/destinations/99999')
+            ->assertStatus(404)
+            ->assertJson([
+                'errors' => [
+                    'message' => [
+                        'not found'
+                    ]
+                ]
+            ]);
+    }
 }
