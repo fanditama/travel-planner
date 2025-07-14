@@ -1,0 +1,386 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Destination API",
+        "description": "Destination API",
+        "version": "1.0.0"
+    },
+    "servers": [{
+        "url": "http://localhost:8000"
+    }],
+    "paths": {
+        "/api/destinations": {
+            "post": {
+                "description": "Create new destination",
+                "parameters": [{
+                    "name": "Authorization",
+                    "in": "header"
+                }],
+                "requestBody": {
+                    "description": "Create new destination",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "location": {
+                                        "type": "string"
+                                    },
+                                    "latitude": {
+                                        "type": "integer"
+                                    },
+                                    "longitude": {
+                                        "type": "integer"
+                                    },
+                                    "category": {
+                                        "type": "string"
+                                    },
+                                    "average-rating": {
+                                        "type": "integer"
+                                    },
+                                    "image-url": {
+                                        "type": "string"
+                                    },
+                                    "approx_price_range": {
+                                        "type": "string"
+                                    },
+                                    "best_time_to_visit": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success create destination",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "location": {
+                                                    "type": "string"
+                                                },
+                                                "latitude": {
+                                                    "type": "integer"
+                                                },
+                                                "longitude": {
+                                                    "type": "integer"
+                                                },
+                                                "category": {
+                                                    "type": "string"
+                                                },
+                                                "average-rating": {
+                                                    "type": "integer"
+                                                },
+                                                "image-url": {
+                                                    "type": "string"
+                                                },
+                                                "approx_price_range": {
+                                                    "type": "string"
+                                                },
+                                                "best_time_to_visit": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/destinations/{id}": {
+            "get": {
+                "description": "Get destination",
+                "parameters": [{
+                    "name": "Authorization",
+                    "in": "header"
+                }, {
+                    "name": "id",
+                    "in": "path"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Success get destination",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "location": {
+                                                    "type": "string"
+                                                },
+                                                "latitude": {
+                                                    "type": "integer"
+                                                },
+                                                "longitude": {
+                                                    "type": "integer"
+                                                },
+                                                "category": {
+                                                    "type": "string"
+                                                },
+                                                "average-rating": {
+                                                    "type": "integer"
+                                                },
+                                                "image-url": {
+                                                    "type": "string"
+                                                },
+                                                "approx_price_range": {
+                                                    "type": "string"
+                                                },
+                                                "best_time_to_visit": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/api/destinations/{id}": {
+                "put": {
+                    "description": "Update destination",
+                    "parameters": [{
+                        "name": "Authorization",
+                        "in": "header"
+                    }, {
+                        "name": "id",
+                        "in": "path"
+                    }],
+                    "requestBody": {
+                        "description": "Update destination",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "latitude": {
+                                            "type": "integer"
+                                        },
+                                        "longitude": {
+                                            "type": "integer"
+                                        },
+                                        "category": {
+                                            "type": "string"
+                                        },
+                                        "average-rating": {
+                                            "type": "integer"
+                                        },
+                                        "image-url": {
+                                            "type": "string"
+                                        },
+                                        "approx_price_range": {
+                                            "type": "string"
+                                        },
+                                        "best_time_to_visit": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Success update destination",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "data": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "number"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "location": {
+                                                        "type": "string"
+                                                    },
+                                                    "latitude": {
+                                                        "type": "integer"
+                                                    },
+                                                    "longitude": {
+                                                        "type": "integer"
+                                                    },
+                                                    "category": {
+                                                        "type": "string"
+                                                    },
+                                                    "average-rating": {
+                                                        "type": "integer"
+                                                    },
+                                                    "image-url": {
+                                                        "type": "string"
+                                                    },
+                                                    "approx_price_range": {
+                                                        "type": "string"
+                                                    },
+                                                    "best_time_to_visit": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "errors": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "get": {
+                        "description": "Search destination",
+                        "parameters": [{
+                            "name": "Authorization",
+                            "in": "header"
+                        }, {
+                            "name": "name",
+                            "in": "query"
+                        }, {
+                            "name": "location",
+                            "in": "query"
+                        }, {
+                            "name": "size",
+                            "in": "query"
+                        }, {
+                            "name": "page",
+                            "in": "query"
+                        }],
+                        "responses": {
+                            "200": {
+                                "description": "Success search destination",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "number"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "location": {
+                                                                "type": "string"
+                                                            },
+                                                            "latitude": {
+                                                                "type": "integer"
+                                                            },
+                                                            "longitude": {
+                                                                "type": "integer"
+                                                            },
+                                                            "category": {
+                                                                "type": "string"
+                                                            },
+                                                            "average-rating": {
+                                                                "type": "integer"
+                                                            },
+                                                            "image-url": {
+                                                                "type": "string"
+                                                            },
+                                                            "approx_price_range": {
+                                                                "type": "string"
+                                                            },
+                                                            "best_time_to_visit": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "errors": {
+                                                    "type": "object"
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "delete": {
+                    "description": "Delete destination",
+                    "parameters": [{
+                        "name": "Authorization",
+                        "in": "header"
+                    }, {
+                        "name": "id",
+                        "in": "path"
+                    }],
+                    "response": {
+                        "200": {
+                            "description": "Success delete destination",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "data": {
+                                                "type": "boolean"
+                                            },
+                                            "errors": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
