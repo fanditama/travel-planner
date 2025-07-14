@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Destination extends Model
 {
@@ -23,4 +24,10 @@ class Destination extends Model
         'approx_price_range',
         'best_time_to_visit'
     ];
+
+    public function tags(): HasMany
+    {
+        return $this->hasMany(Tag::class);
+    }
+
 }
