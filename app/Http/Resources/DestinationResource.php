@@ -25,6 +25,7 @@ class DestinationResource extends JsonResource
             'image_url' => $this->image_url,
             'approx_price_range' => $this->approx_price_range,
             'best_time_to_visit' => $this->best_time_to_visit,
+            'tags' => $this->tags->pluck('tag_name')
         ];
     }
 }

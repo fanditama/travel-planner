@@ -3,9 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Destination;
+use App\Models\Tag;
 use App\Models\User;
 use Database\Seeders\DestinationSearchSeeder;
 use Database\Seeders\DestinationSeeder;
+use Database\Seeders\TagSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
@@ -14,6 +16,8 @@ class DestinationTest extends TestCase
 {
     public function testCreateSuccess()
     {
+        $this->seed([DestinationSeeder::class, TagSeeder::class]);
+
         $this->post('/api/destinations',
             [
                 'name' => 'Test Destination',
@@ -25,6 +29,7 @@ class DestinationTest extends TestCase
                 'image_url' => 'https://example.com/image.jpg',
                 'approx_price_range' => 'Terjangkau',
                 'best_time_to_visit' => 'April hingga Oktober',
+                'tag' => 'Makanan'
             ])->assertStatus(201)
             ->assertJson([
                 'data' => [
@@ -37,12 +42,15 @@ class DestinationTest extends TestCase
                     'image_url' => 'https://example.com/image.jpg',
                     'approx_price_range' => 'Terjangkau',
                     'best_time_to_visit' => 'April hingga Oktober',
+                    'tags' => ['Makanan']
                 ]
             ]);
     }
 
     public function testCreateFailed()
     {
+        $this->seed([DestinationSeeder::class, TagSeeder::class]);
+
         $this->post('/api/destinations',
             [
                 'name' => '',
@@ -54,6 +62,7 @@ class DestinationTest extends TestCase
                 'image_url' => 'https://example.com/image.jpg',
                 'approx_price_range' => 'Terjangkau',
                 'best_time_to_visit' => 'April hingga Oktober',
+                'tag' => 'Makanan'
             ])->assertStatus(400)
             ->assertJson([
                 'errors' => [
@@ -69,6 +78,8 @@ class DestinationTest extends TestCase
 
     public function testGetSuccess()
     {
+        $this->seed([DestinationSeeder::class, TagSeeder::class]);
+
         $destination = Destination::create([
             'name' => 'Test Destination',
             'location' => 'Jakarta',
@@ -79,6 +90,11 @@ class DestinationTest extends TestCase
             'image_url' => 'https://example.com/image.jpg',
             'approx_price_range' => 'Terjangkau',
             'best_time_to_visit' => 'April hingga Oktober',
+        ]);
+
+        Tag::create([
+            'destination_id' => $destination->id,
+            'tag_name' => 'Makanan'
         ]);
 
         $this->get('/api/destinations/' . $destination->id)
@@ -94,6 +110,7 @@ class DestinationTest extends TestCase
                     'image_url' => 'https://example.com/image.jpg',
                     'approx_price_range' => 'Terjangkau',
                     'best_time_to_visit' => 'April hingga Oktober',
+                    'tags' => ['Makanan']
                 ]
             ]);
     }
@@ -113,7 +130,7 @@ class DestinationTest extends TestCase
 
     public function testUpdateSuccess()
     {
-        $this->seed([DestinationSeeder::class]);
+        $this->seed([DestinationSeeder::class, TagSeeder::class]);
 
         $destination = Destination::query()->limit(1)->first();
 
@@ -127,6 +144,7 @@ class DestinationTest extends TestCase
             'image_url' => 'https://example.com/image2.jpg',
             'approx_price_range' => 'Premium',
             'best_time_to_visit' => 'November hingga Februari',
+            'tag' => 'Enjoy'
         ])->assertStatus(200)
             ->assertJson([
                 'data' => [
@@ -139,13 +157,14 @@ class DestinationTest extends TestCase
                     'image_url' => 'https://example.com/image2.jpg',
                     'approx_price_range' => 'Premium',
                     'best_time_to_visit' => 'November hingga Februari',
+                    'tags' => ['Enjoy']
                 ]
             ]);
     }
 
     public function testUpdateValidationError()
     {
-        $this->seed([DestinationSeeder::class]);
+        $this->seed([DestinationSeeder::class, TagSeeder::class]);
 
         $destination = Destination::query()->limit(1)->first();
 
@@ -159,6 +178,7 @@ class DestinationTest extends TestCase
             'image_url' => 'https://example.com/image2.jpg',
             'approx_price_range' => 'Premium',
             'best_time_to_visit' => 'November hingga Februari',
+            'tag' => 'Enjoy'
         ])->assertStatus(400)
             ->assertJson([
                 'errors' => [
@@ -170,7 +190,7 @@ class DestinationTest extends TestCase
     }
 
     public function testDeleteSucces() {
-        $this->seed([DestinationSeeder::class]);
+        $this->seed([DestinationSeeder::class, TagSeeder::class]);
         
         $destination = Destination::query()->limit(1)->first();
 
@@ -183,7 +203,7 @@ class DestinationTest extends TestCase
 
     public function testDeleteNotFound()
     {
-        $this->seed([DestinationSeeder::class]);
+        $this->seed([DestinationSeeder::class, TagSeeder::class]);
 
         $this->delete('/api/destinations/99999')
             ->assertStatus(404)
